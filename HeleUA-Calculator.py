@@ -27,7 +27,7 @@ class Calculator:
         return frame
 
     def create_buttoms_frame(self):
-            frame = tk.Frame(self.windows)
+            frame = tk.Frame(self.window)
             frame.pack(expand=True, fill="both")
             return frame
 
