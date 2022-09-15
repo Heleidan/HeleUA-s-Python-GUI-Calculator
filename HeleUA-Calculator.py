@@ -1,40 +1,90 @@
 from socket import SOMAXCONN
 import tkinter as tk
-tiny_font_style = ("Arial, 16")
-smothy_gray = "#F5F5F5"
-labeled_white = "#25265E"
+LARGE_FONT_STYLE = ("Arial", 40, "bold")
+SMALL_FONT_STYLE = ("Arial", 16)
+DIGITS_FONT_STYLE = ("Arial", 24)
+DEFAULT_FONT_STYLE = ("Arial", 20)
+
+OFF_WHITE = "#F8FAFF"
+WHITE = "#FFFFFF"
+LIGHT_BLUE = "#CCEDFF"
+LIGHT_GRAY = "#F5F5F5"
+LABEL_COLOR = "#00060a"
 class Calculator:
     def __init__(self):
+        #starters 100%
         self.window = tk.Tk()
-        self.window.geometry("375x467")
+        self.window.geometry("375x547")
         self.window.resizable(0, 0)
         self.window.title("HeleUA Calculator")
-        #Display Label
+        #Display Label 100%
         self.total_expression = "0"
         self.current_expression = "0"
-        #buttoms
         self.display_frame = self.create_display_frame()
-        self.buttoms_frame = self.create_buttoms_frame()
-    #definition of display label function
+        self.total_label, self.label= self.create_display_labels()
+        #digits 100%
+        self.digits = {
+            7: (1, 1), 8: (1, 2), 9: (1, 3),
+            4: (2, 1), 5: (2, 2), 6: (2, 3),
+            1: (3, 1), 2: (3, 2), 3: (3, 3),
+            0: (4, 2), '.': (4, 1)
+        }
+        self.operations = {"/": "\u00F7", "*": "\u00D7", "-": "-", "+": "+"}
+        #buttoms 100%, calling from inside
+        self.buttons_frame = self.create_buttons_frame()
+        self.buttons_frame.rowconfigure(0, weight=1)
+        for x in range(1,5):
+            self.buttons_frame.rowconfigure(x, weight=1)
+            self.buttons_frame.columnconfigure(x, weight=1)
+        self.create_digit_buttons()
+        self.create_operation_buttons()
+        self.create_special_buttons()
+    #definition of display label function 100%
+    def create_special_buttons(self):
+        self.create_clear_button()
+        self.create_equals_button()
     def create_display_labels(self):
         total_label = tk.Label(self.display_frame, text=self.total_expression, anchor=tk.E, 
-        bg=smothy_gray, fg=labeled_white, padx=24, font= tiny_font_style)
-        total_label.pack(expand = True, fill = "both")
-    #definitions of buttoms
+        bg=LIGHT_GRAY, fg=LABEL_COLOR, padx=24, font=SMALL_FONT_STYLE)
+        total_label.pack(expand = True, fill='both')
+
+        label = tk.Label(self.display_frame, text=self.current_expression, anchor=tk.E, 
+        bg=LIGHT_GRAY, fg=LABEL_COLOR, padx=24, font=LARGE_FONT_STYLE)
+        label.pack(expand=True, fill='both')
+
+        return total_label, label
+    #definitions of buttoms 100%
     def create_display_frame(self):
-        frame = tk.Frame(self.window, height=221, bg=smothy_gray)
-        frame.pack(expand = True, fill="both")
+        frame = tk.Frame(self.window, height=221, bg=LIGHT_GRAY)
+        frame.pack(expand = True, fill='both')
+        return frame
+    def create_digit_buttons(self):
+        for digit,grid_value in self.digits.items():
+            button = tk.Button(self.buttons_frame, text=str(digit), bg=WHITE, fg=LABEL_COLOR, font=DIGITS_FONT_STYLE, borderwidth=0)
+            button.grid(row=grid_value[0], column=grid_value[1], sticky=tk.NSEW)
+    def create_operation_buttons(self):
+        i = 0
+        for operator, symbol in self.operations.items():
+            button = tk.Button(self.buttons_frame, text=symbol, bg=OFF_WHITE, fg=LABEL_COLOR, font=DEFAULT_FONT_STYLE, borderwidth=0)
+            button.grid(row=i, column=4, sticky=tk.NSEW)
+            i+=1
+    def create_clear_button(self):
+        button = tk.Button(self.buttons_frame, text="C", bg=OFF_WHITE, fg=LABEL_COLOR, font=DEFAULT_FONT_STYLE, borderwidth=0)
+        button.grid(row=0, column=1, columnspan= 3, sticky=tk.NSEW)
+    def create_equals_button(self):
+        button = tk.Button(self.buttons_frame, text="=", bg=LIGHT_BLUE, fg=LABEL_COLOR, font=DEFAULT_FONT_STYLE, borderwidth=0)
+        button.grid(row=4, column=3, columnspan= 32, sticky=tk.NSEW)
+    def create_buttons_frame(self):
+        frame = tk.Frame(self.window)
+        frame.pack(expand=True, fill='both')
         return frame
 
-    def create_buttoms_frame(self):
-            frame = tk.Frame(self.window)
-            frame.pack(expand=True, fill="both")
-            return frame
-
-    def run(self):
+    def run(self): 
         self.window.mainloop()
 if __name__ == "__main__":
     calc = Calculator()
     calc.run()
+
+
     
 #Christian bebe lvl 1
